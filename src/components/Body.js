@@ -1,23 +1,20 @@
 import RestraurantCard from './RestraurantCard';
 import Shimmer from './shimmer'
 import {useState, useEffect} from 'react';
+import { Link } from 'react-router-dom';
+import useOnlineStatus from '../utils/useOnlineStatus';
 
 function Body() {
     const [filteredList, setfilteredList] = useState([]);
     const [toggle, setToggle] = useState(true);
     const [searchText, setsearchtext] = useState("");
     const [originalList, setOriginalList] = useState([]);
-    const [page, setPage] = useState(1);
-    const [loading, setLoading] = useState(false);
-
-
+    const onlineStatus = useOnlineStatus();
     useEffect(()=>{
-        window.addEventListener('scroll', handleScroll);
         fetchData();
     }, []);
 
     let fetchData = async () => {
-        setLoading(true);
         try {
             const data = await fetch('https://www.swiggy.com/dapi/restaurants/list/v5?lat=28.4997983&lng=77.1923685&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING');
             const json = await data.json();
@@ -25,11 +22,9 @@ function Body() {
             // setfilteredList(json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
             setOriginalList(json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
             setfilteredList(prevRestaurants => [...prevRestaurants, ...json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants]);
-            setPage(prevPage => prevPage + 1);
         } catch (error) {
           console.error('Error fetching data:', error);
         }
-        setLoading(false);
     };
 
     let toggleList = () => {
@@ -44,13 +39,9 @@ function Body() {
         }
     }
 
-    const handleScroll = () => {
-        console.log("handle scroll working");
-        if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight) return;
-        if (!loading) {
-        // fetchData();
-        }
-    };
+    if(onlineStatus === false){
+        return <h1>Ooh! looks like you are offline. Kindly check your internet connection!!!</h1>
+    }
 
   return filteredList.length === 0 ? (
   <Shimmer />
@@ -68,13 +59,14 @@ function Body() {
                 </div>
                 <button 
                 className='filter-btn' 
-                onClick={toggleList}>Top Rated Restraurants</button>
+                onClick={toggleList}
+                style={ !toggle ? {backgroundColor: 'grey'} : {}}>Top Rated Restraurants</button>
 
             </div>
             <div className='res-container'>
                 {
                     filteredList.map((elem)=>(
-                        <RestraurantCard data={elem} key={elem.info.id + Math.random()}/>
+                        <Link to={'/restraurants/'+elem.info.id} key={elem.info.id + Math.random()}><RestraurantCard data={elem} key={elem.info.id + Math.random()}/></Link>
                     ))
                 }
             </div>
