@@ -8,7 +8,7 @@ function Header() {
   const onlineStatus = useOnlineStatus();
 
   return (
-    <div className='flex justify-between items-center'>
+    <div className='flex justify-between items-center shadow-lg'>
         <div className='logo-container'>
             <img className='w-20' alt='logo' src={LOGO_URL} /> 
         </div>

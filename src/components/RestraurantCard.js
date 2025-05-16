@@ -5,11 +5,11 @@ function RestraurantCard({data}) {
    const {name, cuisines, avgRating, costForTwo, cloudinaryImageId, sla} = data?.info
   return (
 
-    <div className="card">
+    <div className="m-4 p-4 w-48 bg-slate-300 rounded-lg hover:bg-slate-400">
       <div className="shimmerBG media">
-        <img className='res-logo' alt={name} src={CDN_URL+cloudinaryImageId} />
+        <img className='rounded-lg' alt={name} src={CDN_URL+cloudinaryImageId} />
       </div>
-      <div className="p-32">
+      <div className="p-4">
         <h2 className="font-bold text-xl">{name}</h2>
         <h3>{cuisines.join(', ')}</h3>
         <h4>{avgRating}</h4>

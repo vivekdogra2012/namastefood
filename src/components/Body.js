@@ -48,22 +48,26 @@ function Body() {
     ) : (
         <div className='body'>
 
-            <div className='filter'>
-                <div className='search'>
-                    <input type='text' className='search-box' placeholder='Search for restraurants here !' value={searchText} onChange={(e)=>{setsearchtext(e.target.value)}}></input>
-                    <button onClick={()=>{
+            <div className='filter flex'>
+                <div className='search m-4 p-4 flex gap-2'>
+                    <input type='text' className='search-box border border-solid border-black rounded-sm' placeholder='Search for restraurants here !' value={searchText} onChange={(e)=>{setsearchtext(e.target.value)}}></input>
+                    <button 
+                    className='px-4 py-2 bg-sky-500 rounded-lg hover:bg-sky-600'
+                    onClick={()=>{
                         console.log(searchText)
                         const filteredRestraurants = originalList.filter((res)=> res.info.name.toLowerCase().includes(searchText.toLowerCase()) );
                         filteredRestraurants != [] ? setfilteredList(filteredRestraurants) : console.log(filteredRestraurants);
                     }}>search</button> 
                 </div>
-                <button 
-                className='filter-btn' 
-                onClick={toggleList}
-                style={ !toggle ? {backgroundColor: 'grey'} : {}}>Top Rated Restraurants</button>
+                <div className='flex items-center'>
+                    <button 
+                    className='px-4 py-2 bg-gray-400 rounded-lg hover:bg-gray-500' 
+                    onClick={toggleList}
+                    style={ !toggle ? {backgroundColor: 'grey'} : {}}>Top Rated Restraurants</button>
+                </div>
 
             </div>
-            <div className='res-container'>
+            <div className='flex flex-wrap items-start justify-start'>
                 {
                     filteredList.map((elem)=>(
                         <Link to={'/restraurants/'+elem.info.id} key={elem.info.id + Math.random()}><RestraurantCard data={elem} key={elem.info.id + Math.random()}/></Link>
